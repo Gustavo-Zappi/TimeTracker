@@ -15,7 +15,10 @@ interface StatsTableProps {
   data?: Array<{
     id: string;
     user: string;
+    email: string;
+    sector: string;
     department: string;
+    lastActivity: string;
     totalTime: string;
     productiveTime: string;
     nonProductiveTime: string;
@@ -28,7 +31,10 @@ const defaultData = [
   {
     id: "1",
     user: "John Doe",
+    email: "john.doe@company.com",
+    sector: "Technology",
     department: "Engineering",
+    lastActivity: "2 minutes ago",
     totalTime: "40h 30m",
     productiveTime: "32h 15m",
     nonProductiveTime: "8h 15m",
@@ -38,7 +44,10 @@ const defaultData = [
   {
     id: "2",
     user: "Jane Smith",
+    email: "jane.smith@company.com",
+    sector: "Design",
     department: "Design",
+    lastActivity: "5 minutes ago",
     totalTime: "38h 45m",
     productiveTime: "30h 20m",
     nonProductiveTime: "8h 25m",
@@ -48,7 +57,10 @@ const defaultData = [
   {
     id: "3",
     user: "Mike Johnson",
+    email: "mike.johnson@company.com",
+    sector: "Marketing",
     department: "Marketing",
+    lastActivity: "15 minutes ago",
     totalTime: "42h 15m",
     productiveTime: "35h 45m",
     nonProductiveTime: "6h 30m",
@@ -80,7 +92,25 @@ const StatsTable = ({ data = defaultData }: StatsTableProps) => {
               </TableHead>
               <TableHead>
                 <div className="flex items-center">
+                  Email
+                  <ArrowUpDown className="ml-2 h-4 w-4" />
+                </div>
+              </TableHead>
+              <TableHead>
+                <div className="flex items-center">
+                  Sector
+                  <ArrowUpDown className="ml-2 h-4 w-4" />
+                </div>
+              </TableHead>
+              <TableHead>
+                <div className="flex items-center">
                   Department
+                  <ArrowUpDown className="ml-2 h-4 w-4" />
+                </div>
+              </TableHead>
+              <TableHead>
+                <div className="flex items-center">
+                  Last Activity
                   <ArrowUpDown className="ml-2 h-4 w-4" />
                 </div>
               </TableHead>
@@ -110,7 +140,10 @@ const StatsTable = ({ data = defaultData }: StatsTableProps) => {
             {data.map((row) => (
               <TableRow key={row.id}>
                 <TableCell className="font-medium">{row.user}</TableCell>
+                <TableCell>{row.email}</TableCell>
+                <TableCell>{row.sector}</TableCell>
                 <TableCell>{row.department}</TableCell>
+                <TableCell>{row.lastActivity}</TableCell>
                 <TableCell>{row.totalTime}</TableCell>
                 <TableCell className="text-green-600">
                   {row.productiveTime}

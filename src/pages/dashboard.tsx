@@ -38,7 +38,10 @@ export default function DashboardPage() {
               {
                 id: "1",
                 user: "John Doe",
+                email: "john.doe@company.com",
+                sector: "Technology",
                 department: "Engineering",
+                lastActivity: "2 minutes ago",
                 totalTime: "40h 30m",
                 productiveTime: "32h 15m",
                 nonProductiveTime: "8h 15m",
@@ -48,7 +51,10 @@ export default function DashboardPage() {
               {
                 id: "2",
                 user: "Jane Smith",
+                email: "jane.smith@company.com",
+                sector: "Design",
                 department: "Design",
+                lastActivity: "5 minutes ago",
                 totalTime: "38h 45m",
                 productiveTime: "30h 20m",
                 nonProductiveTime: "8h 25m",
@@ -58,7 +64,10 @@ export default function DashboardPage() {
               {
                 id: "3",
                 user: "Mike Johnson",
+                email: "mike.johnson@company.com",
+                sector: "Marketing",
                 department: "Marketing",
+                lastActivity: "15 minutes ago",
                 totalTime: "42h 15m",
                 productiveTime: "35h 45m",
                 nonProductiveTime: "6h 30m",
