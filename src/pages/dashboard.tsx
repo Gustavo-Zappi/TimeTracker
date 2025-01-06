@@ -1,8 +1,51 @@
 import React, { useState } from "react";
-import FilterPanel from "@/components/dashboard/FilterPanel";
+import DashboardLayout from "@/components/dashboard/layout/DashboardLayout";
+import DashboardHeader from "@/components/dashboard/header/DashboardHeader";
 import MetricCards from "@/components/dashboard/MetricCards";
-import ChartSection from "@/components/dashboard/ChartSection";
+import ChartGrid from "@/components/dashboard/charts/ChartGrid";
 import StatsTable from "@/components/dashboard/StatsTable";
+
+const mockTableData = [
+  {
+    id: "1",
+    user: "John Doe",
+    email: "john.doe@company.com",
+    sector: "Technology",
+    department: "Engineering",
+    lastActivity: "2 minutes ago",
+    totalTime: "40h 30m",
+    productiveTime: "32h 15m",
+    nonProductiveTime: "8h 15m",
+    topProductiveApps: ["VS Code", "GitHub", "Slack"],
+    topNonProductiveApps: ["YouTube", "Facebook", "Twitter"],
+  },
+  {
+    id: "2",
+    user: "Jane Smith",
+    email: "jane.smith@company.com",
+    sector: "Design",
+    department: "Design",
+    lastActivity: "5 minutes ago",
+    totalTime: "38h 45m",
+    productiveTime: "30h 20m",
+    nonProductiveTime: "8h 25m",
+    topProductiveApps: ["Figma", "Adobe XD", "Miro"],
+    topNonProductiveApps: ["Instagram", "Facebook", "Twitter"],
+  },
+  {
+    id: "3",
+    user: "Mike Johnson",
+    email: "mike.johnson@company.com",
+    sector: "Marketing",
+    department: "Marketing",
+    lastActivity: "15 minutes ago",
+    totalTime: "42h 15m",
+    productiveTime: "35h 45m",
+    nonProductiveTime: "6h 30m",
+    topProductiveApps: ["Google Analytics", "Hubspot", "Asana"],
+    topNonProductiveApps: ["YouTube", "Instagram", "TikTok"],
+  },
+];
 
 export default function DashboardPage() {
   const [selectedApplication, setSelectedApplication] =
@@ -13,71 +56,21 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-gray-50">
-      <div className="sticky top-0 z-10 bg-gray-50">
-        <FilterPanel onApplicationChange={handleApplicationChange} />
-      </div>
+    <DashboardLayout>
+      <DashboardHeader onApplicationChange={handleApplicationChange} />
 
-      <div className="flex-1 overflow-y-auto p-6">
-        <div className="space-y-6">
-          <h1 className="text-3xl font-bold">Time Usage Dashboard</h1>
+      <MetricCards
+        metrics={{
+          totalTime: "120h",
+          productiveTime: "80h",
+          neutralTime: "20h",
+          nonProductiveTime: "40h",
+        }}
+      />
 
-          <MetricCards
-            metrics={{
-              totalTime: "120h",
-              productiveTime: "80h",
-              neutralTime: "20h",
-              nonProductiveTime: "40h",
-            }}
-          />
+      <ChartGrid selectedApplication={selectedApplication} />
 
-          {selectedApplication === "all-applications" && <ChartSection />}
-
-          <StatsTable
-            data={[
-              {
-                id: "1",
-                user: "John Doe",
-                email: "john.doe@company.com",
-                sector: "Technology",
-                department: "Engineering",
-                lastActivity: "2 minutes ago",
-                totalTime: "40h 30m",
-                productiveTime: "32h 15m",
-                nonProductiveTime: "8h 15m",
-                topProductiveApps: ["VS Code", "GitHub", "Slack"],
-                topNonProductiveApps: ["YouTube", "Facebook", "Twitter"],
-              },
-              {
-                id: "2",
-                user: "Jane Smith",
-                email: "jane.smith@company.com",
-                sector: "Design",
-                department: "Design",
-                lastActivity: "5 minutes ago",
-                totalTime: "38h 45m",
-                productiveTime: "30h 20m",
-                nonProductiveTime: "8h 25m",
-                topProductiveApps: ["Figma", "Adobe XD", "Miro"],
-                topNonProductiveApps: ["Instagram", "Facebook", "Twitter"],
-              },
-              {
-                id: "3",
-                user: "Mike Johnson",
-                email: "mike.johnson@company.com",
-                sector: "Marketing",
-                department: "Marketing",
-                lastActivity: "15 minutes ago",
-                totalTime: "42h 15m",
-                productiveTime: "35h 45m",
-                nonProductiveTime: "6h 30m",
-                topProductiveApps: ["Google Analytics", "Hubspot", "Asana"],
-                topNonProductiveApps: ["YouTube", "Instagram", "TikTok"],
-              },
-            ]}
-          />
-        </div>
-      </div>
-    </div>
+      <StatsTable data={mockTableData} />
+    </DashboardLayout>
   );
 }

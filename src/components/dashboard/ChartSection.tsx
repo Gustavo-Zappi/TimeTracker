@@ -4,8 +4,6 @@ import {
   PieChart,
   Pie,
   Cell,
-  LineChart,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -17,22 +15,29 @@ import {
 } from "recharts";
 
 const COLORS = {
+  // Bar chart colors
   productive: "#4ade80",
   nonProductive: "#f87171",
   neutral: "#fbbf24",
-  high: "#ef4444",
-  medium: "#f59e0b",
-  low: "#10b981",
-  sanctioned: "#3b82f6",
-  unsanctioned: "#ef4444",
-  underAnalysis: "#f59e0b",
+
+  // Pie chart colors - using a consistent palette
+  primary: "#3b82f6", // Blue
+  secondary: "#10b981", // Green
+  tertiary: "#f59e0b", // Orange/Yellow
+  quaternary: "#ef4444", // Red
+  quinary: "#8b5cf6", // Purple
+  senary: "#ec4899", // Pink
+  septenary: "#6366f1", // Indigo
 };
 
-const weeklyData = [
-  { date: "Week 1", productive: 45, nonProductive: 30 },
-  { date: "Week 2", productive: 50, nonProductive: 25 },
-  { date: "Week 3", productive: 35, nonProductive: 40 },
-  { date: "Week 4", productive: 55, nonProductive: 20 },
+const PIE_CHART_COLORS = [
+  COLORS.primary,
+  COLORS.secondary,
+  COLORS.tertiary,
+  COLORS.quaternary,
+  COLORS.quinary,
+  COLORS.senary,
+  COLORS.septenary,
 ];
 
 const topApplications = [
@@ -54,13 +59,6 @@ const departmentData = [
   { name: "Marketing", value: 30 },
   { name: "Sales", value: 20 },
   { name: "HR", value: 10 },
-];
-
-const sectorData = [
-  { name: "Technology", value: 35 },
-  { name: "Operations", value: 25 },
-  { name: "Finance", value: 20 },
-  { name: "Support", value: 20 },
 ];
 
 const appTypeData = [
@@ -98,124 +96,76 @@ export default function ChartSection() {
     return null;
   };
 
+  const renderPieChart = (data, title) => (
+    <Card className="p-6">
+      <h2 className="text-2xl font-semibold mb-4">{title}</h2>
+      <div className="h-[300px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <Pie
+              data={data}
+              cx="50%"
+              cy="50%"
+              labelLine={false}
+              label={({ name, value }) => `${name}: ${value}%`}
+              outerRadius={80}
+              fill="#8884d8"
+              dataKey="value"
+            >
+              {data.map((_, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={PIE_CHART_COLORS[index % PIE_CHART_COLORS.length]}
+                />
+              ))}
+            </Pie>
+            <Tooltip content={renderCustomTooltip} />
+            <Legend />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+    </Card>
+  );
+
   return (
     <div className="space-y-6">
-      {/* Top Applications - Bar Chart */}
-      <Card className="p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-semibold">Top Applications</h2>
-          <button className="text-sm text-blue-600 hover:underline">
-            See more
-          </button>
-        </div>
-        <div className="h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={topApplications} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis type="number" />
-              <YAxis dataKey="name" type="category" width={100} />
-              <Tooltip />
-              <Bar dataKey="hours" fill={COLORS.productive} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </Card>
-
-      {/* Time Spent per Week - Line Chart */}
-      <Card className="p-6">
-        <h2 className="text-2xl font-semibold mb-4">Time Spent per Week</h2>
-        <div className="h-[300px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={weeklyData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line
-                type="monotone"
-                dataKey="productive"
-                stroke={COLORS.productive}
-                strokeWidth={2}
-              />
-              <Line
-                type="monotone"
-                dataKey="nonProductive"
-                stroke={COLORS.nonProductive}
-                strokeWidth={2}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </Card>
-
-      {/* Grid for smaller charts */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Time Spent by Category - Pie Chart */}
+      {/* Bar Charts Section */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Top Applications - Bar Chart */}
         <Card className="p-6">
-          <h2 className="text-2xl font-semibold mb-4">Time by Category</h2>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-semibold">Top Applications</h2>
+          </div>
           <div className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={categoryData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, value }) => `${name}: ${value}%`}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {categoryData.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={
-                        COLORS[entry.name.toLowerCase().replace("-", "")] ||
-                        COLORS.neutral
-                      }
-                    />
-                  ))}
-                </Pie>
-                <Tooltip content={renderCustomTooltip} />
-              </PieChart>
+              <BarChart data={topApplications} layout="vertical">
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis type="number" />
+                <YAxis dataKey="name" type="category" width={100} />
+                <Tooltip />
+                <Bar dataKey="hours" fill={COLORS.primary} />
+              </BarChart>
             </ResponsiveContainer>
           </div>
         </Card>
 
-        {/* Time Spent by Department - Bar Chart */}
+        {/* Time by Department - Bar Chart */}
         <Card className="p-6">
           <h2 className="text-2xl font-semibold mb-4">Time by Department</h2>
           <div className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={departmentData}>
+              <BarChart data={departmentData} layout="vertical">
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
+                <XAxis type="number" />
+                <YAxis dataKey="name" type="category" width={100} />
                 <Tooltip />
-                <Bar dataKey="value" fill={COLORS.productive} />
+                <Bar dataKey="value" fill={COLORS.primary} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </Card>
 
-        {/* Time Spent by Sector - Bar Chart */}
-        <Card className="p-6">
-          <h2 className="text-2xl font-semibold mb-4">Time by Sector</h2>
-          <div className="h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={sectorData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="value" fill={COLORS.productive} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </Card>
-
-        {/* Time Spent by Application Type - Bar Chart */}
+        {/* Time by App Type - Bar Chart */}
         <Card className="p-6">
           <h2 className="text-2xl font-semibold mb-4">Time by App Type</h2>
           <div className="h-[300px]">
@@ -225,72 +175,18 @@ export default function ChartSection() {
                 <XAxis type="number" />
                 <YAxis dataKey="name" type="category" width={100} />
                 <Tooltip />
-                <Bar dataKey="value" fill={COLORS.productive} />
+                <Bar dataKey="value" fill={COLORS.primary} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </Card>
+      </div>
 
-        {/* Time Spent by Sanction Status - Pie Chart */}
-        <Card className="p-6">
-          <h2 className="text-2xl font-semibold mb-4">By Sanction Status</h2>
-          <div className="h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={sanctionData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, value }) => `${name}: ${value}%`}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {sanctionData.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={
-                        COLORS[entry.name.toLowerCase().replace(" ", "")] ||
-                        COLORS.neutral
-                      }
-                    />
-                  ))}
-                </Pie>
-                <Tooltip content={renderCustomTooltip} />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </Card>
-
-        {/* Time Spent by Risk Level - Pie Chart */}
-        <Card className="p-6">
-          <h2 className="text-2xl font-semibold mb-4">By Risk Level</h2>
-          <div className="h-[300px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={riskData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, value }) => `${name}: ${value}%`}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {riskData.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[entry.name.toLowerCase()]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip content={renderCustomTooltip} />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </Card>
+      {/* Pie Charts Section */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {renderPieChart(categoryData, "Time by Category")}
+        {renderPieChart(sanctionData, "By Sanction Status")}
+        {renderPieChart(riskData, "By Risk Level")}
       </div>
     </div>
   );
